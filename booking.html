@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IPL 2026 - Ticket Booking</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <h2>IPL 2026</h2>
+
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#matches">Matches</a></li>
+            <li><a href="booking.html">Book Ticket</a></li>
+            <li><a href="index.html#bookings">My Bookings</a></li>
+            <li><a href="index.html#guidelines">Guidelines</a></li>
+        </ul>
+    </nav>
+
+
+    <!-- Ticket Booking Form -->
+    <section class="booking-section">
+
+        <h2>IPL 2026 Ticket Booking</h2>
+
+        <p style="text-align: center;">
+            Book your favourite IPL match tickets!
+        </p>
+
+        <div class="card">
+
+            <form action="#" method="get">
+
+                <h3>Personal Information</h3>
+
+                <!-- Name -->
+                <label for="name">Full Name:</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your full name"
+                    minlength="3"
+                    maxlength="50"
+                    pattern="[A-Za-z ]+"
+                    required
+                >
+
+                <!-- Email -->
+                <label for="email">Email Address:</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="example@gmail.com"
+                    maxlength="100"
+                    required
+                >
+
+                <!-- Phone -->
+                <label for="phone">Phone Number:</label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter 10-digit mobile number"
+                    pattern="[6-9][0-9]{9}"
+                    minlength="10"
+                    maxlength="10"
+                    required
+                >
+
+                <h3>Match Details</h3>
+
+                <!-- Match Selection -->
+                <label for="match">Select Match:</label>
+
+                <select id="match" name="match" required>
+
+                    <option value="">-- Select Match --</option>
+                    <option value="CSK vs MI">CSK vs MI</option>
+                    <option value="RCB vs KKR">RCB vs KKR</option>
+                    <option value="MI vs RCB">MI vs RCB</option>
+                    <option value="CSK vs RCB">CSK vs RCB</option>
+                    <option value="KKR vs MI">KKR vs MI</option>
+
+                </select>
+
+                <!-- Stand Selection -->
+                <label for="stand">Select Stand Category:</label>
+
+                <select id="stand" name="stand" required>
+
+                    <option value="">-- Select Stand --</option>
+                    <option value="General">General</option>
+                    <option value="Premium">Premium</option>
+                    <option value="VIP">VIP</option>
+
+                </select>
+
+                <!-- Number of Tickets -->
+                <label for="quantity">Number of Tickets:</label>
+
+                <input
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    min="1"
+                    max="10"
+                    placeholder="Maximum 10 tickets"
+                    required
+                >
+
+                <h3>Additional Preferences</h3>
+
+                <!-- Radio Buttons -->
+                <p>Preferred Seating:</p>
+
+                <label>
+                    <input
+                        type="radio"
+                        name="seating"
+                        value="Near Boundary"
+                        required
+                    >
+                    Near Boundary
+                </label>
+
+                <label>
+                    <input
+                        type="radio"
+                        name="seating"
+                        value="Center View"
+                    >
+                    Center View
+                </label>
+
+                <label>
+                    <input
+                        type="radio"
+                        name="seating"
+                        value="No Preference"
+                    >
+                    No Preference
+                </label>
+
+                <br><br>
+
+                <!-- Terms Checkbox -->
+                <label>
+                    <input
+                        type="checkbox"
+                        name="terms"
+                        value="accepted"
+                        required
+                    >
+                    I agree to the terms and conditions.
+                </label>
+
+                <br><br>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn">
+                    Submit Booking
+                </button>
+
+                <!-- Reset Button -->
+                <button type="reset" class="btn">
+                    Reset Form
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            &copy; 2026 IPL Ticket Booking.
+            All Rights Reserved.
+        </p>
+    </footer>
+
+</body>
+
+</html>
