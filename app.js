@@ -1,409 +1,127 @@
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
+const teamFilter = document.getElementById("teamFilter");
+const gridBtn = document.getElementById("gridBtn");
+const listBtn = document.getElementById("listBtn");
+const matchContainer = document.getElementById("matchContainer");
+const matchCards = document.querySelectorAll(".match-card");
 
-/* ==========================================
-   IPL 2026 TICKET BOOKING WEBSITE
-   JAVASCRIPT - ACTIVITY 4 + ACTIVITY 7
-========================================== */
+// Hamburger menu toggle on mobile
+menuBtn.addEventListener("click", () => {
+    const isOpen = navLinks.classList.toggle("show");
+    menuBtn.setAttribute("aria-expanded", String(isOpen));
+});
 
+// Close mobile menu when a nav link is clicked
+navLinks.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+        navLinks.classList.remove("show");
+        menuBtn.setAttribute("aria-expanded", "false");
+    });
+});
 
-/* 1. REUSABLE TOAST FUNCTION */
+// Filter match cards by selected team
+teamFilter.addEventListener("change", (event) => {
+    const selectedTeam = event.target.value;
 
-function showToast(message, type = "success") {
+    matchCards.forEach((card) => {
+        const teams = (card.dataset.teams || "").split(/\s+/);
+        const shouldShow = selectedTeam === "All" || teams.includes(selectedTeam);
+        card.style.display = shouldShow ? "" : "none";
+    });
+});
 
-    const oldToast = document.querySelector(".toast");
+// Switch between Grid View and List View
+gridBtn.addEventListener("click", () => {
+    matchContainer.classList.remove("list-view");
+    matchContainer.classList.add("grid-view");
+    gridBtn.classList.add("active");
+    listBtn.classList.remove("active");
+});
 
-    if (oldToast) {
-        oldToast.remove();
-    }
+listBtn.addEventListener("click", () => {
+    matchContainer.classList.remove("grid-view");
+    matchContainer.classList.add("list-view");
+    listBtn.classList.add("active");
+    gridBtn.classList.remove("active");
+});
 
-    const toast = document.createElement("div");
+// Preselect match in booking form from card "Book" links
+const matchSelect = document.getElementById("match");
+const standSelect = document.getElementById("stand");
+const quantityInput = document.getElementById("quantity");
+const summaryMatch = document.getElementById("summaryMatch");
+const summaryStand = document.getElementById("summaryStand");
+const summaryPrice = document.getElementById("summaryPrice");
+const summaryQuantity = document.getElementById("summaryQuantity");
+const summaryTotal = document.getElementById("summaryTotal");
 
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
+const matchStandPrices = {
+    "RCB vs MI": { General: 1500, Premium: 4000, VIP: 8000 },
+    "CSK vs KKR": { General: 1200, Premium: 3500, VIP: 7000 },
+    "MI vs PBKS": { General: 1000, Premium: 3000, VIP: 6500 },
+    "KKR vs RR": { General: 1500, Premium: 4000, VIP: 7500 }
+};
 
-    document.body.appendChild(toast);
-
-    setTimeout(() => {
-        toast.classList.add("show");
-    }, 100);
-
-    setTimeout(() => {
-
-        toast.classList.remove("show");
-
-        setTimeout(() => {
-            toast.remove();
-        }, 400);
-
-    }, 3000);
+function formatINR(amount) {
+    return `₹${amount.toLocaleString("en-IN")}`;
 }
 
+function updateSummary() {
+    const selectedMatch = matchSelect.value;
+    const selectedStand = standSelect.value;
+    const qty = Math.max(1, parseInt(quantityInput.value, 10) || 1);
+    const unitPrice = matchStandPrices[selectedMatch]?.[selectedStand] ?? 1500;
+    const total = unitPrice * qty;
 
-/* 2. MAIN DOM CONTENT LOADED */
+    summaryMatch.textContent = selectedMatch;
+    summaryStand.textContent = selectedStand;
+    summaryPrice.textContent = formatINR(unitPrice);
+    summaryQuantity.textContent = String(qty);
+    summaryTotal.textContent = formatINR(total);
+}
 
-document.addEventListener("DOMContentLoaded", function () {
-
-
-    /* =====================================
-       ACTIVITY 7 - LIVE BOOKING SUMMARY
-    ===================================== */
-
-
-    // SELECT FORM ELEMENTS
-
-    const matchSelect = document.getElementById("match");
-    const standSelect = document.getElementById("stand");
-    const quantityInput = document.getElementById("quantity");
-
-
-    // SELECT SUMMARY ELEMENTS
-
-    const summaryMatch = document.getElementById("summaryMatch");
-    const summaryStand = document.getElementById("summaryStand");
-    const summaryPrice = document.getElementById("summaryPrice");
-    const summaryQuantity = document.getElementById("summaryQuantity");
-    const summaryTotal = document.getElementById("summaryTotal");
-
-
-    // TICKET PRICE DATABASE
-
-    const ticketPrices = {
-
-        "RCB vs MI": {
-            "General": 1500,
-            "Premium": 4000,
-            "VIP": 8000
-        },
-
-        "CSK vs KKR": {
-            "General": 1200,
-            "Premium": 3500,
-            "VIP": 7000
-        },
-
-        "MI vs PBKS": {
-            "General": 1000,
-            "Premium": 3000,
-            "VIP": 6500
-        },
-
-        "KKR vs RR": {
-            "General": 1500,
-            "Premium": 4000,
-            "VIP": 7500
+document.querySelectorAll(".book-link").forEach((btn) => {
+    btn.addEventListener("click", () => {
+        const matchName = btn.dataset.match;
+        if (matchName) {
+            matchSelect.value = matchName;
+            updateSummary();
         }
-
-    };
-
-
-    // UPDATE BOOKING SUMMARY FUNCTION
-
-    function updateBookingSummary() {
-
-        if (!matchSelect || !standSelect || !quantityInput) {
-            return;
-        }
-
-        const selectedMatch = matchSelect.value;
-        const selectedStand = standSelect.value;
-        const quantity = Number(quantityInput.value);
-
-
-        // UPDATE MATCH
-
-        if (summaryMatch) {
-            summaryMatch.textContent =
-                selectedMatch || "Not Selected";
-        }
-
-
-        // UPDATE STAND
-
-        if (summaryStand) {
-            summaryStand.textContent =
-                selectedStand || "Not Selected";
-        }
-
-
-        // VALIDATE QUANTITY
-
-        if (
-            quantityInput.value === "" ||
-            !Number.isInteger(quantity) ||
-            quantity < 1 ||
-            quantity > 10
-        ) {
-
-            if (summaryQuantity) {
-                summaryQuantity.textContent = "Invalid Quantity";
-            }
-
-            if (summaryPrice) {
-                summaryPrice.textContent = "₹0";
-            }
-
-            if (summaryTotal) {
-                summaryTotal.textContent = "₹0";
-            }
-
-            return;
-        }
-
-
-        // UPDATE QUANTITY
-
-        if (summaryQuantity) {
-            summaryQuantity.textContent = quantity;
-        }
-
-
-        // CHECK MATCH AND STAND SELECTION
-
-        if (!selectedMatch || !selectedStand) {
-
-            if (summaryPrice) {
-                summaryPrice.textContent = "₹0";
-            }
-
-            if (summaryTotal) {
-                summaryTotal.textContent = "₹0";
-            }
-
-            return;
-        }
-
-
-        // GET TICKET PRICE
-
-        const price =
-            ticketPrices[selectedMatch]?.[selectedStand];
-
-
-        // CHECK PRICE
-
-        if (price === undefined) {
-
-            if (summaryPrice) {
-                summaryPrice.textContent = "₹0";
-            }
-
-            if (summaryTotal) {
-                summaryTotal.textContent = "₹0";
-            }
-
-            return;
-        }
-
-
-        // CALCULATE TOTAL
-
-        const total = price * quantity;
-
-
-        // UPDATE PRICE
-
-        if (summaryPrice) {
-            summaryPrice.textContent =
-                "₹" + price.toLocaleString("en-IN");
-        }
-
-
-        // UPDATE TOTAL
-
-        if (summaryTotal) {
-            summaryTotal.textContent =
-                "₹" + total.toLocaleString("en-IN");
-        }
-
-    }
-
-
-    // EVENT LISTENERS
-
-    if (matchSelect) {
-        matchSelect.addEventListener(
-            "change",
-            updateBookingSummary
-        );
-    }
-
-    if (standSelect) {
-        standSelect.addEventListener(
-            "change",
-            updateBookingSummary
-        );
-    }
-
-    if (quantityInput) {
-
-        quantityInput.addEventListener(
-            "input",
-            updateBookingSummary
-        );
-
-        quantityInput.addEventListener(
-            "change",
-            updateBookingSummary
-        );
-
-    }
-
-
-    // INITIAL SUMMARY
-
-    updateBookingSummary();
-
-
-    /* =====================================
-       ACTIVITY 4 - SMOOTH SCROLLING
-    ===================================== */
-
-
-    const bookButtons = document.querySelectorAll(".book-link");
-
-    bookButtons.forEach(function (button) {
-
-        button.addEventListener("click", function (event) {
-
-            event.preventDefault();
-
-            const bookingSection =
-                document.getElementById("booking");
-
-            const selectedMatch =
-                button.dataset.match;
-
-            if (bookingSection && matchSelect) {
-
-                // SELECT THE MATCH AUTOMATICALLY
-
-                matchSelect.value = selectedMatch;
-
-                // UPDATE THE BOOKING SUMMARY
-
-                updateBookingSummary();
-
-                // SMOOTH SCROLL TO BOOKING SECTION
-
-                bookingSection.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-
-                // SHOW NOTIFICATION
-
-                showToast(
-                    selectedMatch +
-                    " selected! Choose your ticket category."
-                );
-
-            }
-
-        });
-
     });
+});
 
+matchSelect.addEventListener("change", updateSummary);
+standSelect.addEventListener("change", updateSummary);
+quantityInput.addEventListener("input", updateSummary);
+updateSummary();
 
-    /* =====================================
-       TEAM FILTER
-    ===================================== */
+// Handle booking submission and append row to My Ticket Bookings
+const bookingForm = document.getElementById("bookingForm");
+const bookingTableBody = document.getElementById("bookingTableBody");
+let bookingCounter = 1;
 
+bookingForm.addEventListener("submit", (event) => {
+    event.preventDefault();
 
-    const teamFilter = document.getElementById("teamFilter");
+    const selectedMatch = matchSelect.value;
+    const selectedStand = standSelect.value;
+    const qty = Math.max(1, parseInt(quantityInput.value, 10) || 1);
+    const unitPrice = matchStandPrices[selectedMatch]?.[selectedStand] ?? 1500;
+    const totalAmount = unitPrice * qty;
+    const bookingId = `IPL26-${String(bookingCounter++).padStart(3, "0")}`;
 
-    const matchRows = document.querySelectorAll(
-        "#matchTable tbody tr"
-    );
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${bookingId}</td>
+        <td>${selectedMatch}</td>
+        <td>${selectedStand}</td>
+        <td>${qty}</td>
+        <td>${formatINR(totalAmount)}</td>
+    `;
+    bookingTableBody.appendChild(row);
 
-    if (teamFilter) {
-
-        teamFilter.addEventListener("change", function () {
-
-            const selectedTeam = teamFilter.value;
-
-            matchRows.forEach(function (row) {
-
-                const teams = row.dataset.teams.split(" ");
-
-                if (
-                    selectedTeam === "All" ||
-                    teams.includes(selectedTeam)
-                ) {
-
-                    row.style.display = "";
-
-                } else {
-
-                    row.style.display = "none";
-
-                }
-
-            });
-
-        });
-
-    }
-
-
-    /* =====================================
-       FORM VALIDATION
-    ===================================== */
-
-
-    const bookingForm =
-        document.getElementById("bookingForm");
-
-    if (bookingForm) {
-
-        bookingForm.addEventListener("submit", function (event) {
-
-            event.preventDefault();
-
-            // CHECK HTML FORM VALIDATION
-
-            if (!bookingForm.checkValidity()) {
-
-                bookingForm.reportValidity();
-
-                return;
-
-            }
-
-
-            // GET USER SELECTIONS
-
-            const selectedMatch = matchSelect.value;
-            const selectedStand = standSelect.value;
-            const quantity = Number(quantityInput.value);
-
-
-            // VALIDATE BOOKING DETAILS
-
-            if (
-                !ticketPrices[selectedMatch] ||
-                !ticketPrices[selectedMatch][selectedStand] ||
-                !Number.isInteger(quantity) ||
-                quantity < 1 ||
-                quantity > 10
-            ) {
-
-                showToast(
-                    "Please check your booking details.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            // SUCCESS MESSAGE
-
-            showToast(
-                "Form validated! Booking submission is ready for the next activity."
-            );
-
-        });
-
-    }
-
+    bookingForm.reset();
+    quantityInput.value = "1";
+    updateSummary();
 });

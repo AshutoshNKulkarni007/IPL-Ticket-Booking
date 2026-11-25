@@ -1,191 +1,239 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>IPL Ticket Booking 2026</title>
     <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
     <!-- Navigation Bar -->
-    <nav>
-        <h2>IPL 2026</h2>
-        <a href="#matches">Matches</a>
-        <a href="#booking">Book Ticket</a>
-        <a href="#mybookings">My Bookings</a>
-        <a href="#guidelines">Guidelines</a>
+    <nav class="navbar">
+        <div class="logo">IPL 2026</div>
+
+        <button id="menuBtn" class="menu-btn" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+        <div class="nav-links" id="navLinks">
+            <a href="#matches">Matches</a>
+            <a href="#booking">Book Ticket</a>
+            <a href="#mybookings">My Bookings</a>
+            <a href="#guidelines">Guidelines</a>
+        </div>
     </nav>
 
     <!-- Hero Section -->
-    <header>
+    <header class="hero">
         <h1>Experience The Stadium Energy Live!</h1>
         <p>Watch your favourite teams live in IPL 2026</p>
-        <a href="#matches" class="btn">View Schedule</a>
-        <a href="#booking" class="btn">Book Ticket</a>
+        <div class="hero-actions">
+            <a href="#matches" class="btn">View Schedule</a>
+            <a href="#booking" class="btn btn-secondary">Book Ticket</a>
+        </div>
     </header>
 
     <!-- About IPL -->
-    <section id="about">
+    <section id="about" class="section">
         <h2>About IPL 2026</h2>
 
-        <h3>Popular Teams</h3>
-        <ul>
-            <li>Chennai Super Kings</li>
-            <li>Mumbai Indians</li>
-            <li>Royal Challengers Bengaluru</li>
-            <li>Kolkata Knight Riders</li>
-            <li>Punjab Kings</li>
-            <li>Rajasthan Royals</li>
-        </ul>
+        <div class="about-grid">
+            <div class="info-box">
+                <h3>Popular Teams</h3>
+                <ul>
+                    <li>Chennai Super Kings</li>
+                    <li>Mumbai Indians</li>
+                    <li>Royal Challengers Bengaluru</li>
+                    <li>Kolkata Knight Riders</li>
+                    <li>Punjab Kings</li>
+                    <li>Rajasthan Royals</li>
+                </ul>
+            </div>
 
-        <h3>Major Match Venues</h3>
-        <ul>
-            <li>M. Chinnaswamy Stadium - Bengaluru</li>
-            <li>Wankhede Stadium - Mumbai</li>
-            <li>MA Chidambaram Stadium - Chennai</li>
-            <li>Eden Gardens - Kolkata</li>
-            <li>Narendra Modi Stadium - Ahmedabad</li>
-        </ul>
+            <div class="info-box">
+                <h3>Major Match Venues</h3>
+                <ul>
+                    <li>M. Chinnaswamy Stadium - Bengaluru</li>
+                    <li>Wankhede Stadium - Mumbai</li>
+                    <li>MA Chidambaram Stadium - Chennai</li>
+                    <li>Eden Gardens - Kolkata</li>
+                    <li>Narendra Modi Stadium - Ahmedabad</li>
+                </ul>
+            </div>
+        </div>
     </section>
 
     <!-- Match Schedule -->
-    <section id="matches">
+    <section id="matches" class="section">
         <h2>Match Schedule</h2>
 
-        <label>Filter by Team:</label>
-        <select>
-            <option>All Teams</option>
-            <option>Royal Challengers Bengaluru</option>
-            <option>Mumbai Indians</option>
-            <option>Chennai Super Kings</option>
-            <option>Kolkata Knight Riders</option>
-        </select>
+        <div class="match-controls">
+            <div class="filter-group">
+                <label for="teamFilter">Filter by Team:</label>
+                <select id="teamFilter">
+                    <option value="All">All Teams</option>
+                    <option value="RCB">Royal Challengers Bengaluru</option>
+                    <option value="MI">Mumbai Indians</option>
+                    <option value="CSK">Chennai Super Kings</option>
+                    <option value="KKR">Kolkata Knight Riders</option>
+                    <option value="PBKS">Punjab Kings</option>
+                    <option value="RR">Rajasthan Royals</option>
+                </select>
+            </div>
 
-        <table>
-            <tr>
-                <th>Match No.</th>
-                <th>Teams</th>
-                <th>Date & Time</th>
-                <th>Venue</th>
-                <th>General</th>
-                <th>Premium</th>
-                <th>VIP</th>
-                <th>Action</th>
-            </tr>
+            <div class="view-buttons">
+                <button type="button" id="gridBtn" class="view-btn active">Grid View</button>
+                <button type="button" id="listBtn" class="view-btn">List View</button>
+            </div>
+        </div>
 
-            <tr>
-                <td>1</td>
-                <td>RCB vs MI</td>
-                <td>25 March, 7:30 PM</td>
-                <td>Bengaluru</td>
-                <td>₹1500</td>
-                <td>₹4000</td>
-                <td>₹8000</td>
-                <td><a href="#booking">Book</a></td>
-            </tr>
+        <!-- Match Cards -->
+        <div class="match-container grid-view" id="matchContainer">
 
-            <tr>
-                <td>2</td>
-                <td>CSK vs KKR</td>
-                <td>27 March, 7:30 PM</td>
-                <td>Chennai</td>
-                <td>₹1200</td>
-                <td>₹3500</td>
-                <td>₹7000</td>
-                <td><a href="#booking">Book</a></td>
-            </tr>
+            <div class="match-card" data-teams="RCB MI">
+                <div class="match-header">
+                    <span class="match-tag">Match 1</span>
+                    <h3>RCB vs MI</h3>
+                </div>
+                <div class="match-meta">
+                    <p><strong>Date:</strong> 25 March, 7:30 PM</p>
+                    <p><strong>Venue:</strong> Bengaluru</p>
+                </div>
+                <div class="price-list">
+                    <p>General: ₹1500</p>
+                    <p>Premium: ₹4000</p>
+                    <p>VIP: ₹8000</p>
+                </div>
+                <a href="#booking" class="book-link" data-match="RCB vs MI">Book</a>
+            </div>
 
-            <tr>
-                <td>3</td>
-                <td>MI vs PBKS</td>
-                <td>29 March, 3:30 PM</td>
-                <td>Mumbai</td>
-                <td>₹1000</td>
-                <td>₹3000</td>
-                <td>₹6500</td>
-                <td><a href="#booking">Book</a></td>
-            </tr>
+            <div class="match-card" data-teams="CSK KKR">
+                <div class="match-header">
+                    <span class="match-tag">Match 2</span>
+                    <h3>CSK vs KKR</h3>
+                </div>
+                <div class="match-meta">
+                    <p><strong>Date:</strong> 27 March, 7:30 PM</p>
+                    <p><strong>Venue:</strong> Chennai</p>
+                </div>
+                <div class="price-list">
+                    <p>General: ₹1200</p>
+                    <p>Premium: ₹3500</p>
+                    <p>VIP: ₹7000</p>
+                </div>
+                <a href="#booking" class="book-link" data-match="CSK vs KKR">Book</a>
+            </div>
 
-            <tr>
-                <td>4</td>
-                <td>KKR vs RR</td>
-                <td>31 March, 7:30 PM</td>
-                <td>Kolkata</td>
-                <td>₹1500</td>
-                <td>₹4000</td>
-                <td>₹7500</td>
-                <td><a href="#booking">Book</a></td>
-            </tr>
-        </table>
+            <div class="match-card" data-teams="MI PBKS">
+                <div class="match-header">
+                    <span class="match-tag">Match 3</span>
+                    <h3>MI vs PBKS</h3>
+                </div>
+                <div class="match-meta">
+                    <p><strong>Date:</strong> 29 March, 3:30 PM</p>
+                    <p><strong>Venue:</strong> Mumbai</p>
+                </div>
+                <div class="price-list">
+                    <p>General: ₹1000</p>
+                    <p>Premium: ₹3000</p>
+                    <p>VIP: ₹6500</p>
+                </div>
+                <a href="#booking" class="book-link" data-match="MI vs PBKS">Book</a>
+            </div>
+
+            <div class="match-card" data-teams="KKR RR">
+                <div class="match-header">
+                    <span class="match-tag">Match 4</span>
+                    <h3>KKR vs RR</h3>
+                </div>
+                <div class="match-meta">
+                    <p><strong>Date:</strong> 31 March, 7:30 PM</p>
+                    <p><strong>Venue:</strong> Kolkata</p>
+                </div>
+                <div class="price-list">
+                    <p>General: ₹1500</p>
+                    <p>Premium: ₹4000</p>
+                    <p>VIP: ₹7500</p>
+                </div>
+                <a href="#booking" class="book-link" data-match="KKR vs RR">Book</a>
+            </div>
+
+        </div>
     </section>
 
     <!-- Booking Section -->
-    <section id="booking">
+    <section id="booking" class="section">
         <h2>Book Your Ticket</h2>
 
-        <form>
-            <label>Match:</label>
-            <select id="match">
-                <option value="RCB vs MI">RCB vs MI</option>
-                <option value="CSK vs KKR">CSK vs KKR</option>
-                <option value="MI vs PBKS">MI vs PBKS</option>
-                <option value="KKR vs RR">KKR vs RR</option>
-            </select>
+        <div class="booking-layout">
+            <form id="bookingForm" class="booking-form">
+                <label for="match">Match:</label>
+                <select id="match" required>
+                    <option value="RCB vs MI">RCB vs MI</option>
+                    <option value="CSK vs KKR">CSK vs KKR</option>
+                    <option value="MI vs PBKS">MI vs PBKS</option>
+                    <option value="KKR vs RR">KKR vs RR</option>
+                </select>
 
-            <label>Stand Category:</label>
-            <select id="stand">
-                <option value="General">General</option>
-                <option value="Premium">Premium</option>
-                <option value="VIP">VIP</option>
-            </select>
+                <label for="stand">Stand Category:</label>
+                <select id="stand" required>
+                    <option value="General">General</option>
+                    <option value="Premium">Premium</option>
+                    <option value="VIP">VIP</option>
+                </select>
 
-            <label>Number of Tickets:</label>
-            <input type="number" id="quantity" value="1" min="1" max="10">
+                <label for="quantity">Number of Tickets:</label>
+                <input type="number" id="quantity" value="1" min="1" max="10" required>
 
-            <label>Full Name:</label>
-            <input type="text" placeholder="Enter your name">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" placeholder="Enter your name" required>
 
-            <label>Email:</label>
-            <input type="email" placeholder="Enter your email">
+                <label for="email">Email:</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
 
-            <label>Phone Number:</label>
-            <input type="tel" placeholder="Enter your phone number">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" placeholder="Enter your phone number" required>
 
-            <button type="submit">Confirm Booking</button>
-        </form>
+                <button type="submit" class="submit-btn">Confirm Booking</button>
+            </form>
 
-        <!-- Booking Summary -->
-        <div class="summary">
-            <h3>Booking Summary</h3>
+            <!-- Booking Summary -->
+            <div class="summary">
+                <h3>Booking Summary</h3>
 
-            <p>Match: <span id="summaryMatch">RCB vs MI</span></p>
-            <p>Stand: <span id="summaryStand">General</span></p>
-            <p>Ticket Price: ₹<span id="summaryPrice">1500</span></p>
-            <p>Quantity: <span id="summaryQuantity">1</span></p>
-            <h3>Total Amount: ₹<span id="totalAmount">1500</span></h3>
+                <p>Match: <span id="summaryMatch">RCB vs MI</span></p>
+                <p>Stand: <span id="summaryStand">General</span></p>
+                <p>Ticket Price: <span id="summaryPrice">₹1,500</span></p>
+                <p>Quantity: <span id="summaryQuantity">1</span></p>
+
+                <h3>Total Amount: <span id="summaryTotal">₹1,500</span></h3>
+            </div>
         </div>
-
-        <!-- Toast Message -->
-        <div id="toast"></div>
     </section>
 
     <!-- My Bookings -->
-    <section id="mybookings">
+    <section id="mybookings" class="section">
         <h2>My Ticket Bookings</h2>
 
-        <table>
-            <tr>
-                <th>Booking ID</th>
-                <th>Match</th>
-                <th>Category</th>
-                <th>Tickets</th>
-                <th>Total Amount</th>
-            </tr>
-        </table>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Match</th>
+                        <th>Category</th>
+                        <th>Tickets</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+
+                <tbody id="bookingTableBody">
+                </tbody>
+            </table>
+        </div>
     </section>
 
     <!-- Guidelines -->
-    <section id="guidelines">
+    <section id="guidelines" class="section">
         <h2>Ticket Guidelines</h2>
 
         <div class="guidelines">
@@ -211,7 +259,6 @@
         <p>&copy; 2026 IPL Ticket Booking. All Rights Reserved.</p>
     </footer>
 
-    <!-- Activity 7 JavaScript -->
     <script src="app.js"></script>
 
 </body>
