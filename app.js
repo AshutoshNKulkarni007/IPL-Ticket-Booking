@@ -35,7 +35,6 @@ function showToast(message, type = "success") {
         }, 400);
 
     }, 3000);
-
 }
 
 
@@ -52,22 +51,16 @@ document.addEventListener("DOMContentLoaded", function () {
     // SELECT FORM ELEMENTS
 
     const matchSelect = document.getElementById("match");
-
     const standSelect = document.getElementById("stand");
-
     const quantityInput = document.getElementById("quantity");
 
 
     // SELECT SUMMARY ELEMENTS
 
     const summaryMatch = document.getElementById("summaryMatch");
-
     const summaryStand = document.getElementById("summaryStand");
-
     const summaryPrice = document.getElementById("summaryPrice");
-
     const summaryQuantity = document.getElementById("summaryQuantity");
-
     const summaryTotal = document.getElementById("summaryTotal");
 
 
@@ -106,28 +99,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateBookingSummary() {
 
-        if (!matchSelect || !standSelect ||
-            !quantityInput || !summaryMatch) {
+        if (!matchSelect || !standSelect || !quantityInput) {
             return;
         }
 
         const selectedMatch = matchSelect.value;
-
         const selectedStand = standSelect.value;
-
         const quantity = Number(quantityInput.value);
 
 
         // UPDATE MATCH
 
-        summaryMatch.textContent =
-            selectedMatch || "Not Selected";
+        if (summaryMatch) {
+            summaryMatch.textContent =
+                selectedMatch || "Not Selected";
+        }
 
 
         // UPDATE STAND
 
-        summaryStand.textContent =
-            selectedStand || "Not Selected";
+        if (summaryStand) {
+            summaryStand.textContent =
+                selectedStand || "Not Selected";
+        }
 
 
         // VALIDATE QUANTITY
@@ -139,26 +133,40 @@ document.addEventListener("DOMContentLoaded", function () {
             quantity > 10
         ) {
 
-            summaryQuantity.textContent = "Invalid Quantity";
+            if (summaryQuantity) {
+                summaryQuantity.textContent = "Invalid Quantity";
+            }
 
-            summaryPrice.textContent = "₹0";
+            if (summaryPrice) {
+                summaryPrice.textContent = "₹0";
+            }
 
-            summaryTotal.textContent = "₹0";
+            if (summaryTotal) {
+                summaryTotal.textContent = "₹0";
+            }
 
             return;
         }
 
 
-        summaryQuantity.textContent = quantity;
+        // UPDATE QUANTITY
+
+        if (summaryQuantity) {
+            summaryQuantity.textContent = quantity;
+        }
 
 
         // CHECK MATCH AND STAND SELECTION
 
         if (!selectedMatch || !selectedStand) {
 
-            summaryPrice.textContent = "₹0";
+            if (summaryPrice) {
+                summaryPrice.textContent = "₹0";
+            }
 
-            summaryTotal.textContent = "₹0";
+            if (summaryTotal) {
+                summaryTotal.textContent = "₹0";
+            }
 
             return;
         }
@@ -167,7 +175,23 @@ document.addEventListener("DOMContentLoaded", function () {
         // GET TICKET PRICE
 
         const price =
-            ticketPrices[selectedMatch][selectedStand];
+            ticketPrices[selectedMatch]?.[selectedStand];
+
+
+        // CHECK PRICE
+
+        if (price === undefined) {
+
+            if (summaryPrice) {
+                summaryPrice.textContent = "₹0";
+            }
+
+            if (summaryTotal) {
+                summaryTotal.textContent = "₹0";
+            }
+
+            return;
+        }
 
 
         // CALCULATE TOTAL
@@ -175,18 +199,20 @@ document.addEventListener("DOMContentLoaded", function () {
         const total = price * quantity;
 
 
-        // UPDATE SUMMARY
+        // UPDATE PRICE
 
-        summaryPrice.textContent =
-            "₹" + price.toLocaleString("en-IN");
+        if (summaryPrice) {
+            summaryPrice.textContent =
+                "₹" + price.toLocaleString("en-IN");
+        }
 
-        summaryTotal.textContent =
-            "₹" + total.toLocaleString("en-IN");
 
+        // UPDATE TOTAL
 
-        // NOTIFICATION
-
-        showToast("Booking summary updated successfully!");
+        if (summaryTotal) {
+            summaryTotal.textContent =
+                "₹" + total.toLocaleString("en-IN");
+        }
 
     }
 
@@ -231,9 +257,8 @@ document.addEventListener("DOMContentLoaded", function () {
        ACTIVITY 4 - SMOOTH SCROLLING
     ===================================== */
 
-    const bookButtons = document.querySelectorAll(
-        '.book-link'
-    );
+
+    const bookButtons = document.querySelectorAll(".book-link");
 
     bookButtons.forEach(function (button) {
 
@@ -247,19 +272,28 @@ document.addEventListener("DOMContentLoaded", function () {
             const selectedMatch =
                 button.dataset.match;
 
-            if (bookingSection) {
+            if (bookingSection && matchSelect) {
+
+                // SELECT THE MATCH AUTOMATICALLY
 
                 matchSelect.value = selectedMatch;
 
+                // UPDATE THE BOOKING SUMMARY
+
                 updateBookingSummary();
+
+                // SMOOTH SCROLL TO BOOKING SECTION
 
                 bookingSection.scrollIntoView({
                     behavior: "smooth",
                     block: "start"
                 });
 
+                // SHOW NOTIFICATION
+
                 showToast(
-                    selectedMatch + " selected! Choose your ticket category."
+                    selectedMatch +
+                    " selected! Choose your ticket category."
                 );
 
             }
@@ -272,6 +306,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /* =====================================
        TEAM FILTER
     ===================================== */
+
 
     const teamFilter = document.getElementById("teamFilter");
 
@@ -313,6 +348,7 @@ document.addEventListener("DOMContentLoaded", function () {
        FORM VALIDATION
     ===================================== */
 
+
     const bookingForm =
         document.getElementById("bookingForm");
 
@@ -322,6 +358,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             event.preventDefault();
 
+            // CHECK HTML FORM VALIDATION
+
             if (!bookingForm.checkValidity()) {
 
                 bookingForm.reportValidity();
@@ -330,11 +368,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
             }
 
+
+            // GET USER SELECTIONS
+
             const selectedMatch = matchSelect.value;
-
             const selectedStand = standSelect.value;
-
             const quantity = Number(quantityInput.value);
+
+
+            // VALIDATE BOOKING DETAILS
 
             if (
                 !ticketPrices[selectedMatch] ||
@@ -344,11 +386,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 quantity > 10
             ) {
 
-                showToast("Please check your booking details.", "error");
+                showToast(
+                    "Please check your booking details.",
+                    "error"
+                );
 
                 return;
 
             }
+
+
+            // SUCCESS MESSAGE
 
             showToast(
                 "Form validated! Booking submission is ready for the next activity."
